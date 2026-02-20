@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>카카오톡 롤링페이퍼</title>
-  <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
 
@@ -565,81 +564,6 @@
       }
     }
 
-    /* ===== QR 코드 ===== */
-    .qr-btn {
-      position: fixed;
-      bottom: 30px;
-      right: 30px;
-      width: 56px;
-      height: 56px;
-      border-radius: 50%;
-      background: var(--kakao-yellow);
-      border: none;
-      cursor: pointer;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-      font-size: 24px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 1000;
-      transition: transform 0.2s;
-    }
-    .qr-btn:hover {
-      transform: scale(1.1);
-    }
-    .qr-overlay {
-      display: none;
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0,0,0,0.6);
-      z-index: 2000;
-      justify-content: center;
-      align-items: center;
-    }
-    .qr-overlay.active {
-      display: flex;
-    }
-    .qr-card {
-      background: #fff;
-      border-radius: 20px;
-      padding: 32px;
-      text-align: center;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
-      max-width: 340px;
-    }
-    .qr-card h3 {
-      font-size: 18px;
-      color: #333;
-      margin-bottom: 8px;
-    }
-    .qr-card p {
-      font-size: 12px;
-      color: #888;
-      margin-bottom: 16px;
-    }
-    .qr-card #qrcode {
-      display: inline-block;
-      margin-bottom: 16px;
-    }
-    .qr-card .qr-url {
-      font-size: 11px;
-      color: #666;
-      background: #f5f5f5;
-      padding: 8px 12px;
-      border-radius: 8px;
-      word-break: break-all;
-      margin-bottom: 16px;
-    }
-    .qr-card .qr-close-btn {
-      padding: 10px 32px;
-      border-radius: 10px;
-      background: var(--kakao-yellow);
-      border: none;
-      font-size: 14px;
-      font-weight: 600;
-      color: #3C1E1E;
-      cursor: pointer;
-    }
   </style>
 </head>
 <body>
@@ -680,14 +604,78 @@
     <div class="message-row" data-type="text">
       <div class="profile-area">
         <div class="profile-pic">
-          <div class="emoji-avatar" style="background: linear-gradient(135deg, #C8E6C9, #81C784);">🧒</div>
+          <img src="사진/이안.png" alt="이안" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">
         </div>
       </div>
       <div class="message-content">
         <div class="sender-name">이안</div>
         <div class="bubble-wrapper">
           <div class="bubble other-bubble">
-            선생님 사랑해요! 작년 한해 잘 돌봐주셔서 감사합니다
+            박세민 선생님! 저를 잘 돌봐주시고 예뻐해 주시고 많은 것을 알려주셔서 감사합니다. 선생님 덕분에 어린이집에 잘 적응할 수 있었고 매일매일이 행복했어요. 이제 선생님을 볼 수 없어 너무 슬프지만 선생님이 주신 사랑 오래오래 기억하며 착한어린이로 성잘할게요! 어디서나 행복하시고 건강하세요. 사랑해요!
+          </div>
+          <span class="time-stamp">오후 3:30</span>
+        </div>
+      </div>
+    </div>
+   <div class="message-row" data-type="text">
+      <div class="profile-area">
+        <div class="profile-pic">
+          <img src="사진/이안.png" alt="이안" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">
+        </div>
+      </div>
+      <div class="message-content">
+        <div class="sender-name">이안</div>
+        <div class="bubble-wrapper">
+          <div class="bubble other-bubble">
+            박세민 선생님! 저를 잘 돌봐주시고 예뻐해 주시고 많은 것을 알려주셔서 감사합니다. 선생님 덕분에 어린이집에 잘 적응할 수 있었고 매일매일이 행복했어요. 이제 선생님을 볼 수 없어 너무 슬프지만 선생님이 주신 사랑 오래오래 기억하며 착한어린이로 성잘할게요! 어디서나 행복하시고 건강하세요. 사랑해요!
+          </div>
+          <span class="time-stamp">오후 3:30</span>
+        </div>
+      </div>
+    </div>
+   <div class="message-row" data-type="text">
+      <div class="profile-area">
+        <div class="profile-pic">
+          <img src="사진/이안.png" alt="이안" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">
+        </div>
+      </div>
+      <div class="message-content">
+        <div class="sender-name">이안</div>
+        <div class="bubble-wrapper">
+          <div class="bubble other-bubble">
+            박세민 선생님! 저를 잘 돌봐주시고 예뻐해 주시고 많은 것을 알려주셔서 감사합니다. 선생님 덕분에 어린이집에 잘 적응할 수 있었고 매일매일이 행복했어요. 이제 선생님을 볼 수 없어 너무 슬프지만 선생님이 주신 사랑 오래오래 기억하며 착한어린이로 성잘할게요! 어디서나 행복하시고 건강하세요. 사랑해요!
+          </div>
+          <span class="time-stamp">오후 3:30</span>
+        </div>
+      </div>
+    </div>
+   <div class="message-row" data-type="text">
+      <div class="profile-area">
+        <div class="profile-pic">
+          <img src="사진/이안.png" alt="이안" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">
+        </div>
+      </div>
+      <div class="message-content">
+        <div class="sender-name">이안</div>
+        <div class="bubble-wrapper">
+          <div class="bubble other-bubble">
+            박세민 선생님! 저를 잘 돌봐주시고 예뻐해 주시고 많은 것을 알려주셔서 감사합니다. 선생님 덕분에 어린이집에 잘 적응할 수 있었고 매일매일이 행복했어요. 이제 선생님을 볼 수 없어 너무 슬프지만 선생님이 주신 사랑 오래오래 기억하며 착한어린이로 성잘할게요! 어디서나 행복하시고 건강하세요. 사랑해요!
+          </div>
+          <span class="time-stamp">오후 3:30</span>
+        </div>
+      </div>
+    </div>
+   <div class="message-row" data-type="text">
+      <div class="profile-area">
+        <div class="profile-pic">
+          <img src="사진/이안.png" alt="이안" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">
+        </div>
+      </div>
+      <div class="message-content">
+        <div class="sender-name">샛별반 친구들</div>
+        <div class="bubble-wrapper">
+          <div class="bubble image-bubble">
+            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='120' viewBox='0 0 200 120'%3E%3Crect width='200' height='120' fill='%23fff'/%3E%3Cg fill='%23000'%3E%3Crect x='10' y='10' width='3' height='80'/%3E%3Crect x='15' y='10' width='1' height='80'/%3E%3Crect x='18' y='10' width='2' height='80'/%3E%3Crect x='23' y='10' width='1' height='80'/%3E%3Crect x='26' y='10' width='3' height='80'/%3E%3Crect x='31' y='10' width='1' height='80'/%3E%3Crect x='34' y='10' width='2' height='80'/%3E%3Crect x='38' y='10' width='1' height='80'/%3E%3Crect x='41' y='10' width='3' height='80'/%3E%3Crect x='46' y='10' width='2' height='80'/%3E%3Crect x='50' y='10' width='1' height='80'/%3E%3Crect x='53' y='10' width='3' height='80'/%3E%3Crect x='58' y='10' width='1' height='80'/%3E%3Crect x='61' y='10' width='2' height='80'/%3E%3Crect x='65' y='10' width='1' height='80'/%3E%3Crect x='68' y='10' width='3' height='80'/%3E%3Crect x='73' y='10' width='1' height='80'/%3E%3Crect x='76' y='10' width='2' height='80'/%3E%3Crect x='80' y='10' width='3' height='80'/%3E%3Crect x='85' y='10' width='1' height='80'/%3E%3Crect x='88' y='10' width='2' height='80'/%3E%3Crect x='92' y='10' width='1' height='80'/%3E%3Crect x='95' y='10' width='3' height='80'/%3E%3Crect x='100' y='10' width='1' height='80'/%3E%3Crect x='103' y='10' width='2' height='80'/%3E%3Crect x='107' y='10' width='3' height='80'/%3E%3Crect x='112' y='10' width='1' height='80'/%3E%3Crect x='115' y='10' width='2' height='80'/%3E%3Crect x='119' y='10' width='1' height='80'/%3E%3Crect x='122' y='10' width='3' height='80'/%3E%3Crect x='127' y='10' width='2' height='80'/%3E%3Crect x='131' y='10' width='1' height='80'/%3E%3Crect x='134' y='10' width='3' height='80'/%3E%3Crect x='139' y='10' width='1' height='80'/%3E%3Crect x='142' y='10' width='2' height='80'/%3E%3Crect x='146' y='10' width='1' height='80'/%3E%3Crect x='149' y='10' width='3' height='80'/%3E%3Crect x='154' y='10' width='1' height='80'/%3E%3Crect x='157' y='10' width='2' height='80'/%3E%3Crect x='161' y='10' width='3' height='80'/%3E%3Crect x='166' y='10' width='1' height='80'/%3E%3Crect x='169' y='10' width='2' height='80'/%3E%3Crect x='173' y='10' width='1' height='80'/%3E%3Crect x='176' y='10' width='3' height='80'/%3E%3Crect x='181' y='10' width='2' height='80'/%3E%3Crect x='185' y='10' width='1' height='80'/%3E%3Crect x='188' y='10' width='3' height='80'/%3E%3C/g%3E%3Ctext x='100' y='105' text-anchor='middle' font-family='Arial' font-size='10' fill='%23333'%3E8 80100 12345 6%3C/text%3E%3C/svg%3E" alt="바코드">
           </div>
           <span class="time-stamp">오후 3:30</span>
         </div>
@@ -709,18 +697,6 @@
 
   <!-- 폭죽 컨테이너 -->
   <div class="confetti" id="confetti"></div>
-</div>
-
-<!-- QR 코드 버튼 & 오버레이 -->
-<button class="qr-btn" onclick="document.getElementById('qrOverlay').classList.add('active')" title="QR 코드 보기">📱</button>
-<div class="qr-overlay" id="qrOverlay" onclick="if(event.target===this)this.classList.remove('active')">
-  <div class="qr-card">
-    <h3>📱 휴대폰으로 보기</h3>
-    <p>같은 Wi-Fi에 연결된 휴대폰으로 QR을 스캔하세요</p>
-    <div id="qrcode"></div>
-    <div class="qr-url" id="qrUrl"></div>
-    <button class="qr-close-btn" onclick="document.getElementById('qrOverlay').classList.remove('active')">닫기</button>
-  </div>
 </div>
 
 <script>
@@ -751,18 +727,6 @@
   window.addEventListener('load', () => {
     const chatArea = document.getElementById('chatArea');
     chatArea.scrollTop = chatArea.scrollHeight;
-
-    // QR 코드 생성
-    const pageUrl = 'https://sunyoungkim3.github.io/present/';
-    document.getElementById('qrUrl').textContent = pageUrl;
-    new QRCode(document.getElementById('qrcode'), {
-      text: pageUrl,
-      width: 200,
-      height: 200,
-      colorDark: '#000000',
-      colorLight: '#ffffff',
-      correctLevel: QRCode.CorrectLevel.M
-    });
   });
 </script>
 
