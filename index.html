@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>카카오톡 롤링페이퍼</title>
+  <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --kakao-bg: #B2C7D9;
+      --kakao-yellow: #FEE500;
+      --kakao-brown: #3C1E1E;
+      --kakao-my-bubble: #FFEB33;
+      --kakao-other-bubble: #FFFFFF;
+      --kakao-dark-bg: #2C2C2C;
+      --kakao-header: #3E3E3E;
+      --kakao-system: rgba(0, 0, 0, 0.15);
+      --kakao-time: rgba(0, 0, 0, 0.4);
+      --kakao-link: #4A90D9;
+    }
+
+    body {
+      font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #f5f5f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    /* ===== 폰 프레임 ===== */
+    .phone-frame {
+      width: 390px;
+      height: 844px;
+      background: var(--kakao-bg);
+      border-radius: 40px;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3), 0 0 0 2px #1a1a1a;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    /* ===== 상단 헤더 ===== */
+    .chat-header {
+      background: var(--kakao-bg);
+      padding: 50px 16px 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      position: relative;
+      z-index: 10;
+    }
+
+    .chat-header .back-btn {
+      width: 24px;
+      height: 24px;
+      cursor: pointer;
+      opacity: 0.7;
+    }
+
+    .chat-header .back-btn svg {
+      fill: #555;
+    }
+
+    .chat-header .room-info {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .chat-header .room-title {
+      font-size: 17px;
+      font-weight: 600;
+      color: #333;
+    }
+
+    .chat-header .member-count {
+      font-size: 13px;
+      color: #888;
+    }
+
+    .chat-header .header-icons {
+      display: flex;
+      gap: 16px;
+      opacity: 0.6;
+    }
+
+    .chat-header .header-icons svg {
+      width: 22px;
+      height: 22px;
+      fill: #555;
+      cursor: pointer;
+    }
+
+    /* ===== 채팅 영역 ===== */
+    .chat-area {
+      flex: 1;
+      overflow-y: auto;
+      padding: 8px 12px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      scroll-behavior: smooth;
+    }
+
+    .chat-area::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .chat-area::-webkit-scrollbar-thumb {
+      background: rgba(0,0,0,0.15);
+      border-radius: 2px;
+    }
+
+    /* ===== 날짜 구분선 ===== */
+    .date-divider {
+      text-align: center;
+      margin: 12px 0;
+    }
+
+    .date-divider span {
+      background: rgba(0, 0, 0, 0.12);
+      color: #fff;
+      font-size: 12px;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-weight: 400;
+    }
+
+    /* ===== 시스템 메시지 ===== */
+    .system-message {
+      text-align: center;
+      margin: 8px 0;
+    }
+
+    .system-message span {
+      background: rgba(0, 0, 0, 0.08);
+      color: rgba(0, 0, 0, 0.5);
+      font-size: 11px;
+      padding: 4px 10px;
+      border-radius: 12px;
+    }
+
+    /* ===== 메시지 행 ===== */
+    .message-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      margin-bottom: 2px;
+      animation: fadeInUp 0.3s ease;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .message-row.my-message {
+      flex-direction: row-reverse;
+    }
+
+    /* ===== 프로필 ===== */
+    .profile-area {
+      width: 42px;
+      flex-shrink: 0;
+    }
+
+    .profile-pic {
+      width: 42px;
+      height: 42px;
+      border-radius: 16px;
+      background: #ddd;
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    .profile-pic img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .profile-pic .emoji-avatar {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      background: linear-gradient(135deg, #FFE082, #FFB74D);
+    }
+
+    .message-row.continued .profile-area {
+      visibility: hidden;
+    }
+
+    /* ===== 메시지 컨텐츠 ===== */
+    .message-content {
+      max-width: 65%;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .sender-name {
+      font-size: 12px;
+      color: rgba(0, 0, 0, 0.6);
+      margin-bottom: 2px;
+      margin-left: 4px;
+      font-weight: 500;
+    }
+
+    .message-row.continued .sender-name,
+    .message-row.my-message .sender-name {
+      display: none;
+    }
+
+    .bubble-wrapper {
+      display: flex;
+      align-items: flex-end;
+      gap: 4px;
+    }
+
+    .message-row.my-message .bubble-wrapper {
+      flex-direction: row-reverse;
+    }
+
+    /* ===== 말풍선 ===== */
+    .bubble {
+      padding: 8px 12px;
+      border-radius: 16px;
+      font-size: 14px;
+      line-height: 1.5;
+      word-break: break-word;
+      position: relative;
+    }
+
+    .other-bubble {
+      background: var(--kakao-other-bubble);
+      color: #333;
+      border-top-left-radius: 4px;
+    }
+
+    .my-bubble {
+      background: var(--kakao-my-bubble);
+      color: #333;
+      border-top-right-radius: 4px;
+    }
+
+    .message-row.continued .other-bubble {
+      border-top-left-radius: 16px;
+    }
+
+    .message-row.continued .my-bubble {
+      border-top-right-radius: 16px;
+    }
+
+    /* ===== 시간 표시 ===== */
+    .time-stamp {
+      font-size: 10px;
+      color: var(--kakao-time);
+      white-space: nowrap;
+      flex-shrink: 0;
+      align-self: flex-end;
+      margin-bottom: 2px;
+    }
+
+    /* ===== 이미지 메시지 ===== */
+    .bubble.image-bubble {
+      padding: 0;
+      overflow: hidden;
+      border-radius: 16px;
+      max-width: 200px;
+    }
+
+    .bubble.image-bubble img {
+      width: 100%;
+      display: block;
+    }
+
+    /* ===== 스티커/이모티콘 ===== */
+    .bubble.sticker-bubble {
+      background: transparent;
+      padding: 0;
+      font-size: 64px;
+      line-height: 1;
+    }
+
+    /* ===== 롤링페이퍼 특별 말풍선 ===== */
+    .bubble.special-bubble {
+      background: linear-gradient(135deg, #FFF9C4, #FFECB3);
+      border: 1px solid #FFE082;
+      padding: 12px 16px;
+    }
+
+    .bubble.special-bubble .heart-deco {
+      position: absolute;
+      top: -8px;
+      right: -4px;
+      font-size: 16px;
+      animation: heartPulse 1.5s infinite;
+    }
+
+    @keyframes heartPulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+    }
+
+    .bubble.letter-bubble {
+      background: #FFF8E1;
+      border: 1px dashed #FFB74D;
+      padding: 14px 16px;
+      font-style: italic;
+      position: relative;
+    }
+
+    .bubble.letter-bubble::before {
+      content: '✉️';
+      position: absolute;
+      top: -10px;
+      left: -6px;
+      font-size: 18px;
+    }
+
+    /* ===== 하단 입력 영역 ===== */
+    .input-area {
+      background: #fff;
+      padding: 8px 12px 30px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-top: 1px solid #e5e5e5;
+    }
+
+    .input-tools {
+      display: flex;
+      gap: 8px;
+    }
+
+    .input-tools svg {
+      width: 24px;
+      height: 24px;
+      fill: #999;
+      cursor: pointer;
+    }
+
+    .input-field {
+      flex: 1;
+      border: none;
+      background: #F5F5F5;
+      border-radius: 20px;
+      padding: 8px 14px;
+      font-size: 14px;
+      font-family: inherit;
+      outline: none;
+      resize: none;
+      max-height: 80px;
+      line-height: 1.4;
+    }
+
+    .input-field::placeholder {
+      color: #bbb;
+    }
+
+    .send-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--kakao-yellow);
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+
+    .send-btn:hover {
+      background: #FFD600;
+      transform: scale(1.05);
+    }
+
+    .send-btn svg {
+      width: 18px;
+      height: 18px;
+      fill: var(--kakao-brown);
+    }
+
+    /* ===== 롤링페이퍼 배너 ===== */
+    .rolling-banner {
+      background: linear-gradient(135deg, #FFE082, #FFC107);
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      border-bottom: 1px solid #E0A500;
+    }
+
+    .rolling-banner .banner-icon {
+      font-size: 20px;
+    }
+
+    .rolling-banner .banner-text {
+      flex: 1;
+    }
+
+    .rolling-banner .banner-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: #5D4037;
+    }
+
+    .rolling-banner .banner-desc {
+      font-size: 11px;
+      color: #795548;
+    }
+
+    .rolling-banner .banner-arrow {
+      font-size: 14px;
+      color: #795548;
+    }
+
+    /* ===== 참여자 카운터 ===== */
+    .participant-counter {
+      text-align: center;
+      padding: 6px;
+      background: rgba(255,255,255,0.3);
+      font-size: 11px;
+      color: rgba(0,0,0,0.5);
+    }
+
+    /* ===== 반응형 ===== */
+    @media (max-width: 420px) {
+      body {
+        padding: 0;
+      }
+      .phone-frame {
+        width: 100%;
+        height: 100vh;
+        border-radius: 0;
+        box-shadow: none;
+      }
+    }
+
+    /* ===== 읽음 표시 ===== */
+    .read-count {
+      font-size: 10px;
+      color: var(--kakao-yellow);
+      margin-bottom: 2px;
+    }
+
+    .my-message .read-count {
+      text-align: right;
+    }
+
+    /* ===== 공지 메시지 ===== */
+    .announcement {
+      background: rgba(255, 235, 59, 0.15);
+      border-radius: 12px;
+      padding: 10px 14px;
+      margin: 8px 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .announcement .ann-icon {
+      font-size: 16px;
+    }
+
+    .announcement .ann-text {
+      font-size: 12px;
+      color: #555;
+      flex: 1;
+    }
+
+    .announcement .ann-text strong {
+      color: #333;
+    }
+
+    /* ===== 투표 말풍선 ===== */
+    .bubble.vote-bubble {
+      background: #fff;
+      border: 1px solid #e0e0e0;
+      padding: 14px;
+      min-width: 200px;
+    }
+
+    .vote-title {
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #333;
+    }
+
+    .vote-option {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 0;
+      font-size: 13px;
+      color: #555;
+    }
+
+    .vote-bar {
+      flex: 1;
+      height: 6px;
+      background: #f0f0f0;
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .vote-bar-fill {
+      height: 100%;
+      background: var(--kakao-yellow);
+      border-radius: 3px;
+      transition: width 0.5s ease;
+    }
+
+    .confetti {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 50;
+      overflow: hidden;
+    }
+
+    .confetti-piece {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      animation: confettiFall 3s ease-in forwards;
+    }
+
+    @keyframes confettiFall {
+      0% {
+        opacity: 1;
+        transform: translateY(-20px) rotate(0deg);
+      }
+      100% {
+        opacity: 0;
+        transform: translateY(800px) rotate(720deg);
+      }
+    }
+
+    /* ===== QR 코드 ===== */
+    .qr-btn {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: var(--kakao-yellow);
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      font-size: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      transition: transform 0.2s;
+    }
+    .qr-btn:hover {
+      transform: scale(1.1);
+    }
+    .qr-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.6);
+      z-index: 2000;
+      justify-content: center;
+      align-items: center;
+    }
+    .qr-overlay.active {
+      display: flex;
+    }
+    .qr-card {
+      background: #fff;
+      border-radius: 20px;
+      padding: 32px;
+      text-align: center;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+      max-width: 340px;
+    }
+    .qr-card h3 {
+      font-size: 18px;
+      color: #333;
+      margin-bottom: 8px;
+    }
+    .qr-card p {
+      font-size: 12px;
+      color: #888;
+      margin-bottom: 16px;
+    }
+    .qr-card #qrcode {
+      display: inline-block;
+      margin-bottom: 16px;
+    }
+    .qr-card .qr-url {
+      font-size: 11px;
+      color: #666;
+      background: #f5f5f5;
+      padding: 8px 12px;
+      border-radius: 8px;
+      word-break: break-all;
+      margin-bottom: 16px;
+    }
+    .qr-card .qr-close-btn {
+      padding: 10px 32px;
+      border-radius: 10px;
+      background: var(--kakao-yellow);
+      border: none;
+      font-size: 14px;
+      font-weight: 600;
+      color: #3C1E1E;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+<div class="phone-frame" id="phoneFrame">
+  <!-- 상단 헤더 -->
+  <div class="chat-header">
+    <div class="back-btn">
+      <svg viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+    </div>
+    <div class="room-info">
+      <span class="room-title">🎉 To. 박세민 선생님</span>
+      <span class="member-count" id="memberCount">6</span>
+    </div>
+    <div class="header-icons">
+      <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+      <svg viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+    </div>
+  </div>
+
+
+
+  <!-- 참여자 카운터 -->
+  <div class="participant-counter">
+    💌 샛별반 친구들이 마음을 전했습니다
+  </div>
+
+  <!-- 채팅 영역 -->
+  <div class="chat-area" id="chatArea">
+
+  
+
+
+
+
+  
+    <!-- 메시지 3: 이안 -->
+    <div class="message-row" data-type="text">
+      <div class="profile-area">
+        <div class="profile-pic">
+          <div class="emoji-avatar" style="background: linear-gradient(135deg, #C8E6C9, #81C784);">🧒</div>
+        </div>
+      </div>
+      <div class="message-content">
+        <div class="sender-name">이안</div>
+        <div class="bubble-wrapper">
+          <div class="bubble other-bubble">
+            선생님 사랑해요! 작년 한해 잘 돌봐주셔서 감사합니다
+          </div>
+          <span class="time-stamp">오후 3:30</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- 하단 입력 영역 -->
+  <div class="input-area">
+    <div class="input-tools">
+      <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+    </div>
+    <input type="text" class="input-field" placeholder="메시지를 남겨보세요..." readonly>
+    <button class="send-btn">
+      <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+    </button>
+  </div>
+
+  <!-- 폭죽 컨테이너 -->
+  <div class="confetti" id="confetti"></div>
+</div>
+
+<!-- QR 코드 버튼 & 오버레이 -->
+<button class="qr-btn" onclick="document.getElementById('qrOverlay').classList.add('active')" title="QR 코드 보기">📱</button>
+<div class="qr-overlay" id="qrOverlay" onclick="if(event.target===this)this.classList.remove('active')">
+  <div class="qr-card">
+    <h3>📱 휴대폰으로 보기</h3>
+    <p>같은 Wi-Fi에 연결된 휴대폰으로 QR을 스캔하세요</p>
+    <div id="qrcode"></div>
+    <div class="qr-url" id="qrUrl"></div>
+    <button class="qr-close-btn" onclick="document.getElementById('qrOverlay').classList.remove('active')">닫기</button>
+  </div>
+</div>
+
+<script>
+  // ===== 폭죽 효과 =====
+  function launchConfetti() {
+    const container = document.getElementById('confetti');
+    const colors = ['#FFC107', '#FF5722', '#4CAF50', '#2196F3', '#E91E63', '#9C27B0', '#FF9800'];
+    
+    for (let i = 0; i < 30; i++) {
+      const piece = document.createElement('div');
+      piece.className = 'confetti-piece';
+      piece.style.left = Math.random() * 100 + '%';
+      piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+      piece.style.animationDelay = Math.random() * 0.5 + 's';
+      piece.style.animationDuration = (2 + Math.random() * 2) + 's';
+      piece.style.width = (4 + Math.random() * 8) + 'px';
+      piece.style.height = (4 + Math.random() * 8) + 'px';
+      piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+      container.appendChild(piece);
+    }
+
+    setTimeout(() => {
+      container.innerHTML = '';
+    }, 4000);
+  }
+
+  // ===== 초기 스크롤 =====
+  window.addEventListener('load', () => {
+    const chatArea = document.getElementById('chatArea');
+    chatArea.scrollTop = chatArea.scrollHeight;
+
+    // QR 코드 생성
+    const pageUrl = 'https://sunyoungkim3.github.io/present/';
+    document.getElementById('qrUrl').textContent = pageUrl;
+    new QRCode(document.getElementById('qrcode'), {
+      text: pageUrl,
+      width: 200,
+      height: 200,
+      colorDark: '#000000',
+      colorLight: '#ffffff',
+      correctLevel: QRCode.CorrectLevel.M
+    });
+  });
+</script>
+
+</body>
+</html>
