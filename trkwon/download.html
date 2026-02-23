@@ -84,12 +84,8 @@
   </div>
 
   <script>
-    // 자동 다운로드 시도
-    window.addEventListener('load', () => {
-      setTimeout(() => {
-        document.getElementById('downloadBtn').click();
-        document.getElementById('status').textContent = '✅ 다운로드가 시작되었습니다!';
-      }, 1000);
+    document.getElementById('downloadBtn').addEventListener('click', () => {
+      document.getElementById('status').textContent = '✅ 다운로드가 시작되었습니다!';
     });
   </script>
 </body>
