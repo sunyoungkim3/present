@@ -592,46 +592,37 @@
       transform: scale(0.98);
     }
 
-    /* ===== 기프티콘 모달 ===== */
-    .gift-overlay {
+    /* ===== 기프티콘 드롭다운 ===== */
+    .gift-dropdown {
       display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(0,0,0,0.85);
-      z-index: 99999;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-      gap: 16px;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    .gift-overlay.show {
-      display: flex;
-    }
-
-    .gift-overlay img {
-      max-width: 85%;
-      max-height: 70%;
+      margin-top: 10px;
       border-radius: 16px;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
-      object-fit: contain;
+      overflow: hidden;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+      animation: giftSlideDown 0.3s ease;
     }
 
-    .gift-close-btn {
-      padding: 10px 28px;
-      background: #fff;
-      color: #333;
-      border: none;
-      border-radius: 24px;
-      font-size: 14px;
-      font-family: inherit;
-      font-weight: 600;
-      cursor: pointer;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.2);
+    .gift-dropdown.show {
+      display: block;
+    }
+
+    .gift-dropdown img {
+      width: 100%;
+      display: block;
+      border-radius: 16px;
+    }
+
+    @keyframes giftSlideDown {
+      from {
+        opacity: 0;
+        max-height: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        max-height: 500px;
+        transform: translateY(0);
+      }
     }
 
   </style>
@@ -784,7 +775,10 @@
         <div class="bubble-wrapper">
           <div class="bubble other-bubble" style="text-align:center;">
             선생님 감사합니다! 💕<br>
-            <button class="gift-btn" onclick="showGift(event)">🎁 선물 열어보기</button>
+            <button class="gift-btn" onclick="toggleGift(event)">🎁 선물 열어보기</button>
+            <div class="gift-dropdown" id="giftDropdown">
+              <img src="../사진/기프티콘1.jpg" alt="기프티콘">
+            </div>
           </div>
           <span class="time-stamp">오후 3:36</span>
         </div>
@@ -806,12 +800,6 @@
 
   <!-- 폭죽 컨테이너 -->
   <div class="confetti" id="confetti"></div>
-</div>
-
-<!-- 기프티콘 모달 -->
-<div class="gift-overlay" id="giftOverlay" onclick="hideGift(event)">
-  <img src="../사진/기프티콘1.jpg" alt="기프티콘" onclick="event.stopPropagation()">
-  <button class="gift-close-btn" onclick="hideGift(event)">닫기</button>
 </div>
 
 
@@ -839,14 +827,13 @@
     }, 4000);
   }
 
-  // ===== 선물 모달 =====
-  function showGift(e) {
+  // ===== 선물 드롭다운 =====
+  function toggleGift(e) {
     if (e) e.stopPropagation();
-    document.getElementById('giftOverlay').classList.add('show');
-  }
-  function hideGift(e) {
-    if (e) e.stopPropagation();
-    document.getElementById('giftOverlay').classList.remove('show');
+    const dropdown = document.getElementById('giftDropdown');
+    dropdown.classList.toggle('show');
+    const btn = e.target;
+    btn.textContent = dropdown.classList.contains('show') ? '🎁 선물 닫기' : '🎁 선물 열어보기';
   }
 
   // ===== 초기 스크롤 =====
